@@ -1,8 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
-import { RegisterUseCase } from '@/use-cases/register'
-import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
 import { UserAlreadyExistsError } from '@/use-cases/errors/user-already-exists-error'
+import { makeRegisterUseCase } from '@/use-cases/factories/make-register-use-case'
 
 export default async function register(
   request: FastifyRequest,
@@ -18,9 +17,7 @@ export default async function register(
   const { name, email, plan, password } = registerBodySchema.parse(request.body)
 
   try {
-    const usersRepository = new PrismaUsersRepository() // If want to change the dependency, just change this line
-
-    const registerUseCase = new RegisterUseCase(usersRepository)
+    const registerUseCase = makeRegisterUseCase()
 
     await registerUseCase.execute({ name, email, plan, password })
   } catch (err) {
