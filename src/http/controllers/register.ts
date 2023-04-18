@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
-import { RegisterService } from '@/services/register'
+import { RegisterUseCase } from '@/use-cases/register'
 import { PrismaUsersRepository } from '@/repositories/prisma/prisma-users-repository'
 
 export async function register(request: FastifyRequest, reply: FastifyReply) {
@@ -16,7 +16,7 @@ export async function register(request: FastifyRequest, reply: FastifyReply) {
   try {
     const usersRepository = new PrismaUsersRepository() // If want to change the dependency, just change this line
 
-    const registerService = new RegisterService(usersRepository)
+    const registerService = new RegisterUseCase(usersRepository)
 
     await registerService.execute({ name, email, plan, password })
   } catch (err) {
