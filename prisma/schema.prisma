@@ -10,12 +10,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Plan {
+  free
+  pro
+  business
+}
+
 model User {
   id            String @id @default(uuid())
   name          String
   email         String @unique
   password_hash String
-  plan          String @default("free")
+  plan          Plan @default(free)
   created_at    DateTime @default(now())
 
   @@map("users")
